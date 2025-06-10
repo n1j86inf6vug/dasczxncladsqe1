@@ -3,20 +3,25 @@
 <head>
   <meta charset="utf-8">
   <script>
-    (function() {
+    (function () {
       const params = new URLSearchParams(window.location.search);
-      const s = params.get('s');
-      const t = params.get('t');
+      let s = params.get('s');
 
-      if (!s || !t) {
-        window.location.replace("https://www.google.com/")
+      if (!s) {
+        window.location.replace("https://www.google.com/");
         return;
       }
 
-      const ua = navigator.userAgent.toLowerCase();
-      const target = ua.includes('twitter') ? t : s;
+      if (!s.startsWith("http://") && !s.startsWith("https://")) {
+        s = "https://" + s;
+      }
 
-      window.location.replace(target);
+      try {
+        new URL(s);
+        window.location.replace(s);
+      } catch (e) {
+        window.location.replace("https://www.youtube.com/");
+      }
     })();
   </script>
 </head>
